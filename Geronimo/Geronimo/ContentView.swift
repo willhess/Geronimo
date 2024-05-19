@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     @State private var timer1Running = false
@@ -32,15 +33,18 @@ struct ContentView: View {
                         timer2Running = true
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
+                        self.generateHapticFeedback()
                     }
                 } else if timer1Running {
                     timer1Running = false
                     timer2Running = true
                     button1ClickCount += 1
+                    self.generateHapticFeedback()
                 } else if timer2Running {
                     timer1Running = true
                     timer2Running = false
                     button2ClickCount += 1
+                    self.generateHapticFeedback()
                 }
             }) {
                 VStack {
@@ -91,6 +95,7 @@ struct ContentView: View {
                     pauseText = Constants().pause
                     pauseImage = "play.fill"
                     isPaused = false
+                    self.generateHapticFeedback()
                 }) {
                     Image(systemName: "arrow.circlepath")
                         .imageScale(.large)
@@ -108,6 +113,7 @@ struct ContentView: View {
                         pauseText = Constants().resume
                         pauseImage = "play.fill"
                         isPaused = true
+                        self.generateHapticFeedback()
                     } else if timer2Running {
                         lastTimerRunning = 2
                         timer1Running = false
@@ -115,16 +121,19 @@ struct ContentView: View {
                         pauseText = Constants().resume
                         pauseImage = "play.fill"
                         isPaused = true
+                        self.generateHapticFeedback()
                     } else if lastTimerRunning == 1 {
                         timer1Running = true
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
                         isPaused = false
+                        self.generateHapticFeedback()
                     } else if lastTimerRunning == 2 {
                         timer2Running = true
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
                         isPaused = false
+                        self.generateHapticFeedback()
                     }
                 }) {
                     Image(systemName: pauseImage)
@@ -143,15 +152,18 @@ struct ContentView: View {
                         timer1Running = true
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
+                        self.generateHapticFeedback()
                     }
                 } else if timer1Running {
                     timer1Running = false
                     timer2Running = true
                     button1ClickCount += 1
+                    self.generateHapticFeedback()
                 } else if timer2Running {
                     timer1Running = true
                     timer2Running = false
                     button2ClickCount += 1
+                    self.generateHapticFeedback()
                 }
             }) {
                 VStack {
@@ -189,6 +201,12 @@ struct ContentView: View {
             }
         }
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    private func generateHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
     }
     
     func timeString(time: Int) -> String {
@@ -253,6 +271,12 @@ struct TimerPicker: View {
         }
         .padding()
     }
+}
+
+private func generateHapticFeedback() {
+    let generator = UIImpactFeedbackGenerator(style: .medium)
+    generator.prepare()
+    generator.impactOccurred()
 }
 
 struct TimerButtonView_Previews: PreviewProvider {
