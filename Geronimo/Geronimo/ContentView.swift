@@ -18,6 +18,8 @@ struct ContentView: View {
     @State private var button2ClickCount = 0
     @State private var lastTimerRunning: Int = 0
     @State private var pauseText = Constants().pause
+    @State private var pauseImage = "play.fill"
+    @State private var isPaused = false
     
     private var timer1 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private var timer2 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -26,8 +28,11 @@ struct ContentView: View {
         VStack {
             Button(action: {
                 if !timer1Running && !timer2Running {
-                    timer2Running = true
-                    pauseText = Constants().pause
+                    if isPaused == false {
+                        timer2Running = true
+                        pauseText = Constants().pause
+                        pauseImage = "pause.fill"
+                    }
                 } else if timer1Running {
                     timer1Running = false
                     timer2Running = true
@@ -39,25 +44,27 @@ struct ContentView: View {
                 }
             }) {
                 VStack {
-                    Text("\(timeString(time: timer1Count))")
-                        .font(.largeTitle)
                     Text("\(Constants().moveCount) \(button1ClickCount)")
-                        .font(.subheadline)
+                        .font(.system(size: 16, weight: .semibold))
+                    Spacer()
+                    Text("\(timeString(time: timer1Count))")
+                        .font(.system(size: 64, weight: .semibold, design: .default))
                     if !timer1Running && !timer2Running {
                         Button(action: {
                             showTimer1Picker.toggle()
                         }) {
                             Text(Constants().setTime)
-                                .font(.subheadline)
-                                .padding(5)
+                                .font(.system(size: 17, weight: .semibold))
+                                .padding()
                                 .background(Color.white)
                                 .foregroundColor(.black)
-                                .cornerRadius(5)
+                                .cornerRadius(10)
                         }
                     }
+                    Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(timer1Running ? Color.green : Color.gray)
+                .background(timer1Running ? Color.green : Color.black)
                 .foregroundColor(.white)
                 .rotationEffect(.degrees(180))
             }
@@ -72,6 +79,8 @@ struct ContentView: View {
             }
             
             HStack {
+                Spacer(minLength: 16)
+                
                 Button(action: {
                     timer1Count = 600
                     timer2Count = 600
@@ -79,47 +88,62 @@ struct ContentView: View {
                     timer2Running = false
                     button1ClickCount = 0
                     button2ClickCount = 0
+                    pauseText = Constants().pause
+                    pauseImage = "play.fill"
+                    isPaused = false
                 }) {
-                    Text(Constants().reset)
-                        .font(.headline)
-                        .padding()
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                    Image(systemName: "arrow.circlepath")
+                        .imageScale(.large)
+                        .font(.system(size: 30))
+                        .tint(.red)
                 }
+                
+                Spacer()
+                
                 Button(action: {
                     if timer1Running {
                         lastTimerRunning = 1
                         timer1Running = false
                         timer2Running = false
                         pauseText = Constants().resume
+                        pauseImage = "play.fill"
+                        isPaused = true
                     } else if timer2Running {
                         lastTimerRunning = 2
                         timer1Running = false
                         timer2Running = false
                         pauseText = Constants().resume
+                        pauseImage = "play.fill"
+                        isPaused = true
                     } else if lastTimerRunning == 1 {
                         timer1Running = true
                         pauseText = Constants().pause
+                        pauseImage = "pause.fill"
+                        isPaused = false
                     } else if lastTimerRunning == 2 {
                         timer2Running = true
                         pauseText = Constants().pause
+                        pauseImage = "pause.fill"
+                        isPaused = false
                     }
                 }) {
-                    Text(pauseText)
-                        .font(.headline)
-                        .padding()
-                        .background(Color.yellow)
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
+                    Image(systemName: pauseImage)
+                        .imageScale(.large)
+                        .font(.system(size: 30))
+                        .tint(.black)
                 }
+                
+                Spacer(minLength: 16)
             }
             .frame(height: 50)
             
             Button(action: {
                 if !timer1Running && !timer2Running {
-                    timer1Running = true
-                    pauseText = Constants().pause
+                    if isPaused == false {
+                        timer1Running = true
+                        pauseText = Constants().pause
+                        pauseImage = "pause.fill"
+                    }
                 } else if timer1Running {
                     timer1Running = false
                     timer2Running = true
@@ -131,25 +155,27 @@ struct ContentView: View {
                 }
             }) {
                 VStack {
-                    Text("\(timeString(time: timer2Count))")
-                        .font(.largeTitle)
                     Text("\(Constants().moveCount) \(button2ClickCount)")
-                        .font(.subheadline)
+                        .font(.system(size: 16, weight: .semibold))
+                    Spacer()
+                    Text("\(timeString(time: timer2Count))")
+                        .font(.system(size: 64, weight: .semibold, design: .default))
                     if !timer2Running && !timer1Running {
                         Button(action: {
                             showTimer2Picker.toggle()
                         }) {
                             Text(Constants().setTime)
-                                .font(.subheadline)
-                                .padding(5)
+                                .font(.system(size: 17, weight: .semibold))
+                                .padding()
                                 .background(Color.white)
                                 .foregroundColor(.black)
-                                .cornerRadius(5)
+                                .cornerRadius(10)
                         }
                     }
+                    Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(timer2Running ? Color.blue : Color.gray)
+                .background(timer2Running ? Color.blue : Color.black)
                 .foregroundColor(.white)
             }
             .disabled(timer1Running)
@@ -180,8 +206,22 @@ struct TimerPicker: View {
 
     var body: some View {
         VStack {
+            HStack(alignment: .top) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "xmark")
+                        .foregroundColor(.black)
+                        .font(.title)
+                        .padding()
+                }
+                Spacer()
+            }
+            
+            Spacer()
+            
             Text(Constants().setTime)
-                .font(.headline)
+                .font(.system(size: 64, weight: .semibold, design: .default))
             HStack {
                 Picker(Constants().minutes, selection: $minutes) {
                     ForEach(0..<60) { minute in
@@ -203,10 +243,13 @@ struct TimerPicker: View {
                 time = (minutes * 60) + seconds
                 presentationMode.wrappedValue.dismiss()
             }
+            .font(.system(size: 17, weight: .semibold, design: .default))
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
+            
+            Spacer()
         }
         .padding()
     }
