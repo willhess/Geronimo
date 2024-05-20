@@ -26,7 +26,7 @@ struct ContentView: View {
     private var timer2 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Button(action: {
                 if !timer1Running && !timer2Running {
                     if isPaused == false {
@@ -82,7 +82,7 @@ struct ContentView: View {
                 TimerPicker(time: $timer1Count)
             }
             
-            HStack {
+            HStack(spacing: 0) {
                 Spacer(minLength: 16)
                 
                 Button(action: {
@@ -145,6 +145,7 @@ struct ContentView: View {
                 Spacer(minLength: 16)
             }
             .frame(height: 50)
+            .background(Color.white)
             
             Button(action: {
                 if !timer1Running && !timer2Running {
@@ -166,7 +167,7 @@ struct ContentView: View {
                     self.generateHapticFeedback()
                 }
             }) {
-                VStack {
+                VStack(spacing: 0) {
                     Text("\(Constants().moveCount) \(button2ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
                     Spacer()
@@ -201,6 +202,7 @@ struct ContentView: View {
             }
         }
         .edgesIgnoringSafeArea(.all)
+        .background(Color.black)
     }
     
     private func generateHapticFeedback() {
@@ -221,7 +223,8 @@ struct TimerPicker: View {
     @State private var minutes = 0
     @State private var seconds = 0
     @Environment(\.presentationMode) var presentationMode
-
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack {
             HStack(alignment: .top) {
@@ -229,7 +232,7 @@ struct TimerPicker: View {
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "xmark")
-                        .foregroundColor(.black)
+                        .foregroundColor(colorScheme == .light ? Color.black : Color.white)
                         .font(.title)
                         .padding()
                 }
