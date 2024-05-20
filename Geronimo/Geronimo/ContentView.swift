@@ -80,10 +80,13 @@ struct ContentView: View {
 
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: timer1Running || (isPaused && lastTimerRunning == 1) ? UIScreen.main.bounds.height * 2 / 3 : (timer2Running || (isPaused && lastTimerRunning == 2) ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
+                .frame(maxWidth: .infinity, 
+                       maxHeight: timer1Running || (isPaused && lastTimerRunning == 1) ?
+                       UIScreen.main.bounds.height * 2 / 3 : (timer2Running || (isPaused && lastTimerRunning == 2) ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
                 .background(timer1Running || (isPaused && lastTimerRunning == 1) ? Color.green : Color.black)
                 .foregroundColor(.white)
                 .rotationEffect(.degrees(180))
+                .animation(nil, value: timer1Running || (isPaused && lastTimerRunning == 1) || (!timer2Running && !timer1Running) ? Color.green : Color.black)
             }
             .disabled(timer2Running)
             .onReceive(timer1) { _ in
@@ -273,6 +276,7 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: timer2Running || (isPaused && lastTimerRunning == 2) ? UIScreen.main.bounds.height * 2 / 3 : (timer1Running || (isPaused && lastTimerRunning == 1) ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
                 .background(timer2Running || (isPaused && lastTimerRunning == 2) ? Color.blue : Color.black)
                 .foregroundColor(.white)
+                .animation(nil, value: timer2Running || (isPaused && lastTimerRunning == 2) || (!timer2Running && !timer1Running) ? Color.blue : Color.black)
             }
             .disabled(timer1Running)
             .onReceive(timer2) { _ in
