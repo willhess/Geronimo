@@ -48,13 +48,15 @@ struct ContentView: View {
                 }
             }) {
                 VStack(spacing: 0) {
-                    Text("\(Constants().moveCount) \(button1ClickCount)")
-                        .font(.system(size: 16, weight: .semibold))
-
                     Spacer()
 
                     Text("\(timeString(time: timer1Count))")
                         .font(.system(size: 72, weight: .semibold, design: .default))
+
+                    Text("\(Constants().moveCount) \(button1ClickCount)")
+                        .font(.system(size: 16, weight: .semibold))
+
+                    Spacer()
 
                     if !timer1Running && !timer2Running {
                         Button(action: {
@@ -216,13 +218,15 @@ struct ContentView: View {
                 }
             }) {
                 VStack(spacing: 0) {
-                    Text("\(Constants().moveCount) \(button2ClickCount)")
-                        .font(.system(size: 16, weight: .semibold))
-
                     Spacer()
 
                     Text("\(timeString(time: timer2Count))")
                         .font(.system(size: 72, weight: .semibold, design: .default))
+
+                    Text("\(Constants().moveCount) \(button2ClickCount)")
+                        .font(.system(size: 16, weight: .semibold))
+
+                    Spacer()
 
                     if (!timer2Running && !timer1Running) {
                         Button(action: {
