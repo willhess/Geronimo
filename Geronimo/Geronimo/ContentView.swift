@@ -216,6 +216,7 @@ struct ContentView: View {
             }
             .frame(height: 80)
             .offset(y: controlButtonOffset)
+            .zIndex(1)
 
             Button(action: {
                 if !timer1Running && !timer2Running {
