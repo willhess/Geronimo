@@ -23,6 +23,7 @@ struct ContentView: View {
     @State private var isPaused = false
     @State private var controlButtonOffset: CGFloat = 0
     @State private var showRestartAlert = false
+    @State private var isFirstLaunch = true
 
     private var timer1 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private var timer2 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -31,7 +32,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
             Button(action: {
                 if !timer1Running && !timer2Running {
-                    if isPaused == false {
+                    if !isPaused {
                         timer2Running = true
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
@@ -63,7 +64,7 @@ struct ContentView: View {
 
                     Spacer()
 
-                    if !timer1Running && !timer2Running {
+                    if !timer1Running && !timer2Running && isFirstLaunch {
                         Button(action: {
                             showTimer1Picker.toggle()
                         }) {
@@ -78,8 +79,8 @@ struct ContentView: View {
 
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: timer1Running ? UIScreen.main.bounds.height * 2 / 3 : (timer2Running ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
-                .background(timer1Running ? Color.green : Color.black)
+                .frame(maxWidth: .infinity, maxHeight: timer1Running || (isPaused && lastTimerRunning == 1) ? UIScreen.main.bounds.height * 2 / 3 : (timer2Running || (isPaused && lastTimerRunning == 2) ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
+                .background(timer1Running || (isPaused && lastTimerRunning == 1) ? Color.green : Color.black)
                 .foregroundColor(.white)
                 .rotationEffect(.degrees(180))
             }
@@ -106,7 +107,6 @@ struct ContentView: View {
                             pauseImage = "play.fill"
                             isPaused = true
                             self.generateHapticFeedback()
-                            controlButtonOffset = 0
                         } else if timer2Running {
                             lastTimerRunning = 2
                             timer1Running = false
@@ -115,21 +115,18 @@ struct ContentView: View {
                             pauseImage = "play.fill"
                             isPaused = true
                             self.generateHapticFeedback()
-                            controlButtonOffset = 0
                         } else if lastTimerRunning == 1 {
                             timer1Running = true
                             pauseText = Constants().pause
                             pauseImage = "pause.fill"
                             isPaused = false
                             self.generateHapticFeedback()
-                            controlButtonOffset = -40
                         } else if lastTimerRunning == 2 {
                             timer2Running = true
                             pauseText = Constants().pause
                             pauseImage = "pause.fill"
                             isPaused = false
                             self.generateHapticFeedback()
-                            controlButtonOffset = 40
                         }
                     }) {
                         ZStack {
@@ -176,6 +173,7 @@ struct ContentView: View {
                                 pauseText = Constants().pause
                                 pauseImage = "play.fill"
                                 isPaused = false
+                                isFirstLaunch = true
                                 self.generateHapticFeedback()
                             },
                             secondaryButton: .cancel()
@@ -217,14 +215,15 @@ struct ContentView: View {
                 }
             }
             .frame(height: 80)
-            .offset(y:controlButtonOffset)
+            .offset(y: controlButtonOffset)
 
             Button(action: {
                 if !timer1Running && !timer2Running {
-                    if isPaused == false {
+                    if !isPaused {
                         timer1Running = true
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
+                        isFirstLaunch = false
                         self.generateHapticFeedback()
                         controlButtonOffset = -40
                     }
@@ -253,7 +252,7 @@ struct ContentView: View {
 
                     Spacer()
 
-                    if (!timer2Running && !timer1Running) {
+                    if (!timer2Running && !timer1Running && isFirstLaunch) {
                         Button(action: {
                             showTimer2Picker.toggle()
                         }) {
@@ -268,8 +267,8 @@ struct ContentView: View {
 
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: timer2Running ? UIScreen.main.bounds.height * 2 / 3 : (timer1Running ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
-                .background(timer2Running ? Color.blue : Color.black)
+                .frame(maxWidth: .infinity, maxHeight: timer2Running || (isPaused && lastTimerRunning == 2) ? UIScreen.main.bounds.height * 2 / 3 : (timer1Running || (isPaused && lastTimerRunning == 1) ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
+                .background(timer2Running || (isPaused && lastTimerRunning == 2) ? Color.blue : Color.black)
                 .foregroundColor(.white)
             }
             .disabled(timer1Running)
