@@ -67,6 +67,7 @@ struct ContentView: View {
                     if !timer1Running && !timer2Running && isFirstLaunch {
                         Button(action: {
                             showTimer1Picker.toggle()
+                            self.generateHapticFeedback()
                         }) {
                             Text(Constants().setTime)
                                 .font(.system(size: 17, weight: .semibold))
@@ -256,6 +257,7 @@ struct ContentView: View {
                     if (!timer2Running && !timer1Running && isFirstLaunch) {
                         Button(action: {
                             showTimer2Picker.toggle()
+                            self.generateHapticFeedback()
                         }) {
                             Text(Constants().setTime)
                                 .font(.system(size: 17, weight: .semibold))
