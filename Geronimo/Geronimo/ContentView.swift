@@ -86,70 +86,114 @@ struct ContentView: View {
                 TimerPicker(time: $timer1Count)
             }
 
-            HStack() {
-                Spacer(minLength: 16)
+            HStack {
+                if timer1Running || timer2Running {
+                    Spacer()
 
-                Button(action: {
-                    timer1Count = 600
-                    timer2Count = 600
-                    timer1Running = false
-                    timer2Running = false
-                    button1ClickCount = 0
-                    button2ClickCount = 0
-                    pauseText = Constants().pause
-                    pauseImage = "play.fill"
-                    isPaused = false
-                    self.generateHapticFeedback()
-                }) {
-                    Image(systemName: "arrow.circlepath")
-                        .imageScale(.large)
-                        .font(.system(size: 30))
-                        .tint(.red)
-                }
-
-                Spacer()
-
-                Button(action: {
-                    if timer1Running {
-                        lastTimerRunning = 1
-                        timer1Running = false
-                        timer2Running = false
-                        pauseText = Constants().resume
-                        pauseImage = "play.fill"
-                        isPaused = true
-                        self.generateHapticFeedback()
-                    } else if timer2Running {
-                        lastTimerRunning = 2
-                        timer1Running = false
-                        timer2Running = false
-                        pauseText = Constants().resume
-                        pauseImage = "play.fill"
-                        isPaused = true
-                        self.generateHapticFeedback()
-                    } else if lastTimerRunning == 1 {
-                        timer1Running = true
-                        pauseText = Constants().pause
-                        pauseImage = "pause.fill"
-                        isPaused = false
-                        self.generateHapticFeedback()
-                    } else if lastTimerRunning == 2 {
-                        timer2Running = true
-                        pauseText = Constants().pause
-                        pauseImage = "pause.fill"
-                        isPaused = false
-                        self.generateHapticFeedback()
+                    Button(action: {
+                        if timer1Running {
+                            lastTimerRunning = 1
+                            timer1Running = false
+                            timer2Running = false
+                            pauseText = Constants().resume
+                            pauseImage = "play.fill"
+                            isPaused = true
+                            self.generateHapticFeedback()
+                        } else if timer2Running {
+                            lastTimerRunning = 2
+                            timer1Running = false
+                            timer2Running = false
+                            pauseText = Constants().resume
+                            pauseImage = "play.fill"
+                            isPaused = true
+                            self.generateHapticFeedback()
+                        } else if lastTimerRunning == 1 {
+                            timer1Running = true
+                            pauseText = Constants().pause
+                            pauseImage = "pause.fill"
+                            isPaused = false
+                            self.generateHapticFeedback()
+                        } else if lastTimerRunning == 2 {
+                            timer2Running = true
+                            pauseText = Constants().pause
+                            pauseImage = "pause.fill"
+                            isPaused = false
+                            self.generateHapticFeedback()
+                        }
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 80, height: 80)
+                            Image(systemName: pauseImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .tint(Color.black)
+                        }
                     }
-                }) {
-                    Image(systemName: pauseImage)
-                        .imageScale(.large)
-                        .font(.system(size: 30))
-                        .tint(.black)
-                }
 
-                Spacer(minLength: 16)
+                    Spacer()
+                } else if isPaused {
+                    Spacer(minLength: 16)
+
+                    Button(action: {
+                        timer1Count = 600
+                        timer2Count = 600
+                        timer1Running = false
+                        timer2Running = false
+                        button1ClickCount = 0
+                        button2ClickCount = 0
+                        pauseText = Constants().pause
+                        pauseImage = "play.fill"
+                        isPaused = false
+                        self.generateHapticFeedback()
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 80, height: 80)
+                            Image(systemName: "arrow.circlepath")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .tint(Color.black)
+                        }
+                    }
+
+                    Spacer()
+
+                    Button(action: {
+                        if lastTimerRunning == 1 {
+                            timer1Running = true
+                            pauseText = Constants().pause
+                            pauseImage = "pause.fill"
+                            isPaused = false
+                            self.generateHapticFeedback()
+                        } else if lastTimerRunning == 2 {
+                            timer2Running = true
+                            pauseText = Constants().pause
+                            pauseImage = "pause.fill"
+                            isPaused = false
+                            self.generateHapticFeedback()
+                        }
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 80, height: 80)
+                            Image(systemName: pauseImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .tint(Color.black)
+                        }
+                    }
+
+                    Spacer(minLength: 16)
+                }
             }
-            .frame(height: 50)
-            .background(Color.white)
+            .frame(height: 80)
 
             Button(action: {
                 if !timer1Running && !timer2Running {
