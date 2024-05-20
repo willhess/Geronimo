@@ -47,12 +47,15 @@ struct ContentView: View {
                     self.generateHapticFeedback()
                 }
             }) {
-                VStack {
+                VStack(spacing:0) {
                     Text("\(Constants().moveCount) \(button1ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
+                    
                     Spacer()
+                    
                     Text("\(timeString(time: timer1Count))")
-                        .font(.system(size: 64, weight: .semibold, design: .default))
+                        .font(.system(size: 72, weight: .semibold, design: .default))
+                    
                     if !timer1Running && !timer2Running {
                         Button(action: {
                             showTimer1Picker.toggle()
@@ -65,6 +68,7 @@ struct ContentView: View {
                                 .cornerRadius(10)
                         }
                     }
+                    
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -82,7 +86,7 @@ struct ContentView: View {
                 TimerPicker(time: $timer1Count)
             }
             
-            HStack(spacing: 0) {
+            HStack() {
                 Spacer(minLength: 16)
                 
                 Button(action: {
@@ -170,9 +174,12 @@ struct ContentView: View {
                 VStack(spacing: 0) {
                     Text("\(Constants().moveCount) \(button2ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
+                    
                     Spacer()
+                    
                     Text("\(timeString(time: timer2Count))")
-                        .font(.system(size: 64, weight: .semibold, design: .default))
+                        .font(.system(size: 72, weight: .semibold, design: .default))
+                    
                     if !timer2Running && !timer1Running {
                         Button(action: {
                             showTimer2Picker.toggle()
@@ -185,6 +192,7 @@ struct ContentView: View {
                                 .cornerRadius(10)
                         }
                     }
+                    
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
