@@ -64,7 +64,7 @@ struct ContentView: View {
 
                     Spacer()
 
-                    if !timer1Running && !timer2Running && isFirstLaunch {
+                    if !timer1Running && !timer2Running && isFirstLaunch && !isPaused {
                         Button(action: {
                             showTimer1Picker.toggle()
                             self.generateHapticFeedback()
@@ -254,7 +254,7 @@ struct ContentView: View {
 
                     Spacer()
 
-                    if (!timer2Running && !timer1Running && isFirstLaunch) {
+                    if (!timer2Running && !timer1Running && isFirstLaunch && !isPaused) {
                         Button(action: {
                             showTimer2Picker.toggle()
                             self.generateHapticFeedback()
