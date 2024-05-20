@@ -21,10 +21,10 @@ struct ContentView: View {
     @State private var pauseText = Constants().pause
     @State private var pauseImage = "play.fill"
     @State private var isPaused = false
-    
+
     private var timer1 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private var timer2 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
+
     var body: some View {
         VStack(spacing: 0) {
             Button(action: {
@@ -47,15 +47,15 @@ struct ContentView: View {
                     self.generateHapticFeedback()
                 }
             }) {
-                VStack(spacing:0) {
+                VStack(spacing: 0) {
                     Text("\(Constants().moveCount) \(button1ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
-                    
+
                     Spacer()
-                    
+
                     Text("\(timeString(time: timer1Count))")
                         .font(.system(size: 72, weight: .semibold, design: .default))
-                    
+
                     if !timer1Running && !timer2Running {
                         Button(action: {
                             showTimer1Picker.toggle()
@@ -68,10 +68,10 @@ struct ContentView: View {
                                 .cornerRadius(10)
                         }
                     }
-                    
+
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: timer1Running ? UIScreen.main.bounds.height * 2 / 3 : (timer2Running ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
                 .background(timer1Running ? Color.green : Color.black)
                 .foregroundColor(.white)
                 .rotationEffect(.degrees(180))
@@ -85,10 +85,10 @@ struct ContentView: View {
             .sheet(isPresented: $showTimer1Picker) {
                 TimerPicker(time: $timer1Count)
             }
-            
+
             HStack() {
                 Spacer(minLength: 16)
-                
+
                 Button(action: {
                     timer1Count = 600
                     timer2Count = 600
@@ -106,9 +106,9 @@ struct ContentView: View {
                         .font(.system(size: 30))
                         .tint(.red)
                 }
-                
+
                 Spacer()
-                
+
                 Button(action: {
                     if timer1Running {
                         lastTimerRunning = 1
@@ -145,12 +145,12 @@ struct ContentView: View {
                         .font(.system(size: 30))
                         .tint(.black)
                 }
-                
+
                 Spacer(minLength: 16)
             }
             .frame(height: 50)
             .background(Color.white)
-            
+
             Button(action: {
                 if !timer1Running && !timer2Running {
                     if isPaused == false {
@@ -174,13 +174,13 @@ struct ContentView: View {
                 VStack(spacing: 0) {
                     Text("\(Constants().moveCount) \(button2ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
-                    
+
                     Spacer()
-                    
+
                     Text("\(timeString(time: timer2Count))")
                         .font(.system(size: 72, weight: .semibold, design: .default))
-                    
-                    if !timer2Running && !timer1Running {
+
+                    if (!timer2Running && !timer1Running) {
                         Button(action: {
                             showTimer2Picker.toggle()
                         }) {
@@ -192,10 +192,10 @@ struct ContentView: View {
                                 .cornerRadius(10)
                         }
                     }
-                    
+
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: timer2Running ? UIScreen.main.bounds.height * 2 / 3 : (timer1Running ? UIScreen.main.bounds.height * 1 / 3 : UIScreen.main.bounds.height / 2))
                 .background(timer2Running ? Color.blue : Color.black)
                 .foregroundColor(.white)
             }
@@ -212,13 +212,13 @@ struct ContentView: View {
         .edgesIgnoringSafeArea(.all)
         .background(Color.black)
     }
-    
+
     private func generateHapticFeedback() {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
         generator.impactOccurred()
     }
-    
+
     func timeString(time: Int) -> String {
         let minutes = time / 60
         let seconds = time % 60
@@ -232,7 +232,7 @@ struct TimerPicker: View {
     @State private var seconds = 0
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
-    
+
     var body: some View {
         VStack {
             HStack(alignment: .top) {
@@ -246,9 +246,9 @@ struct TimerPicker: View {
                 }
                 Spacer()
             }
-            
+
             Spacer()
-            
+
             Text(Constants().setTime)
                 .font(.system(size: 64, weight: .semibold, design: .default))
             HStack {
@@ -259,7 +259,7 @@ struct TimerPicker: View {
                 }
                 .pickerStyle(WheelPickerStyle())
                 .frame(width: 100)
-                
+
                 Picker(Constants().seconds, selection: $seconds) {
                     ForEach(0..<60) { second in
                         Text("\(second) sec").tag(second)
@@ -277,7 +277,7 @@ struct TimerPicker: View {
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
-            
+
             Spacer()
         }
         .padding()
@@ -301,7 +301,7 @@ struct Constants {
     var pause: String = "Pause"
     var resume: String = "Resume"
     var reset: String = "Reset"
-    var moveCount: String = "Move Count:"
+    var moveCount: String = "Move:"
     var setTime: String = "Set Time"
     var set: String = "Set"
     var minutes: String = "Minutes"
