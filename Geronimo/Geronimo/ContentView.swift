@@ -21,6 +21,8 @@ struct ContentView: View {
     @State private var pauseText = Constants().pause
     @State private var pauseImage = "play.fill"
     @State private var isPaused = false
+    @State private var controlButtonOffset: CGFloat = 0
+    @State private var showRestartAlert = false
 
     private var timer1 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private var timer2 = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -34,24 +36,27 @@ struct ContentView: View {
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
                         self.generateHapticFeedback()
+                        controlButtonOffset = 40
                     }
                 } else if timer1Running {
                     timer1Running = false
                     timer2Running = true
                     button1ClickCount += 1
                     self.generateHapticFeedback()
+                    controlButtonOffset = 40
                 } else if timer2Running {
                     timer1Running = true
                     timer2Running = false
                     button2ClickCount += 1
                     self.generateHapticFeedback()
+                    controlButtonOffset = -40
                 }
             }) {
                 VStack(spacing: 0) {
                     Spacer()
 
                     Text("\(timeString(time: timer1Count))")
-                        .font(.system(size: 72, weight: .semibold, design: .default))
+                        .font(.system(size: 82, weight: .semibold, design: .default))
 
                     Text("\(Constants().moveCount) \(button1ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
@@ -101,6 +106,7 @@ struct ContentView: View {
                             pauseImage = "play.fill"
                             isPaused = true
                             self.generateHapticFeedback()
+                            controlButtonOffset = 0
                         } else if timer2Running {
                             lastTimerRunning = 2
                             timer1Running = false
@@ -109,18 +115,21 @@ struct ContentView: View {
                             pauseImage = "play.fill"
                             isPaused = true
                             self.generateHapticFeedback()
+                            controlButtonOffset = 0
                         } else if lastTimerRunning == 1 {
                             timer1Running = true
                             pauseText = Constants().pause
                             pauseImage = "pause.fill"
                             isPaused = false
                             self.generateHapticFeedback()
+                            controlButtonOffset = -40
                         } else if lastTimerRunning == 2 {
                             timer2Running = true
                             pauseText = Constants().pause
                             pauseImage = "pause.fill"
                             isPaused = false
                             self.generateHapticFeedback()
+                            controlButtonOffset = 40
                         }
                     }) {
                         ZStack {
@@ -140,16 +149,7 @@ struct ContentView: View {
                     Spacer(minLength: 16)
 
                     Button(action: {
-                        timer1Count = 600
-                        timer2Count = 600
-                        timer1Running = false
-                        timer2Running = false
-                        button1ClickCount = 0
-                        button2ClickCount = 0
-                        pauseText = Constants().pause
-                        pauseImage = "play.fill"
-                        isPaused = false
-                        self.generateHapticFeedback()
+                        showRestartAlert = true
                     }) {
                         ZStack {
                             Circle()
@@ -162,6 +162,25 @@ struct ContentView: View {
                                 .tint(Color.black)
                         }
                     }
+                    .alert(isPresented: $showRestartAlert) {
+                        Alert(
+                            title: Text("Confirm Restart"),
+                            message: Text("Are you sure you want to restart?"),
+                            primaryButton: .destructive(Text("Restart")) {
+                                timer1Count = 600
+                                timer2Count = 600
+                                timer1Running = false
+                                timer2Running = false
+                                button1ClickCount = 0
+                                button2ClickCount = 0
+                                pauseText = Constants().pause
+                                pauseImage = "play.fill"
+                                isPaused = false
+                                self.generateHapticFeedback()
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
 
                     Spacer()
 
@@ -172,12 +191,14 @@ struct ContentView: View {
                             pauseImage = "pause.fill"
                             isPaused = false
                             self.generateHapticFeedback()
+                            controlButtonOffset = -40
                         } else if lastTimerRunning == 2 {
                             timer2Running = true
                             pauseText = Constants().pause
                             pauseImage = "pause.fill"
                             isPaused = false
                             self.generateHapticFeedback()
+                            controlButtonOffset = 40
                         }
                     }) {
                         ZStack {
@@ -196,6 +217,7 @@ struct ContentView: View {
                 }
             }
             .frame(height: 80)
+            .offset(y:controlButtonOffset)
 
             Button(action: {
                 if !timer1Running && !timer2Running {
@@ -204,24 +226,27 @@ struct ContentView: View {
                         pauseText = Constants().pause
                         pauseImage = "pause.fill"
                         self.generateHapticFeedback()
+                        controlButtonOffset = -40
                     }
                 } else if timer1Running {
                     timer1Running = false
                     timer2Running = true
                     button1ClickCount += 1
                     self.generateHapticFeedback()
+                    controlButtonOffset = 40
                 } else if timer2Running {
                     timer1Running = true
                     timer2Running = false
                     button2ClickCount += 1
                     self.generateHapticFeedback()
+                    controlButtonOffset = -40
                 }
             }) {
                 VStack(spacing: 0) {
                     Spacer()
 
                     Text("\(timeString(time: timer2Count))")
-                        .font(.system(size: 72, weight: .semibold, design: .default))
+                        .font(.system(size: 82, weight: .semibold, design: .default))
 
                     Text("\(Constants().moveCount) \(button2ClickCount)")
                         .font(.system(size: 16, weight: .semibold))
@@ -349,7 +374,7 @@ struct Constants {
     var pause: String = "Pause"
     var resume: String = "Resume"
     var reset: String = "Reset"
-    var moveCount: String = "Move:"
+    var moveCount: String = "Move"
     var setTime: String = "Set Time"
     var set: String = "Set"
     var minutes: String = "Minutes"
