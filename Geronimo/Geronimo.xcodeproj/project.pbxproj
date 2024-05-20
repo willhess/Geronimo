@@ -20,6 +20,7 @@
 		D2558A272BF9D8D1004A270F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2558A292BF9D8D1004A270F /* Geronimo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Geronimo.entitlements; sourceTree = "<group>"; };
 		D2558A2B2BF9D8D1004A270F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D27CEFF92BFB36E900FF7BBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +53,7 @@
 		D2558A222BF9D8D0004A270F /* Geronimo */ = {
 			isa = PBXGroup;
 			children = (
+				D27CEFF92BFB36E900FF7BBA /* Info.plist */,
 				D2558A232BF9D8D0004A270F /* GeronimoApp.swift */,
 				D2558A252BF9D8D0004A270F /* ContentView.swift */,
 				D2558A272BF9D8D1004A270F /* Assets.xcassets */,
@@ -273,6 +275,7 @@
 				DEVELOPMENT_TEAM = RM8KYM9N2P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Geronimo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Geronimo;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -311,6 +314,7 @@
 				DEVELOPMENT_TEAM = RM8KYM9N2P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Geronimo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Geronimo;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
